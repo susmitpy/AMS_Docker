@@ -4,3 +4,4 @@ gunicorn==19.6.0
 pandas<=1.0.4
 django-crispy-forms==1.9.1
 mongoengine
+dnspython
