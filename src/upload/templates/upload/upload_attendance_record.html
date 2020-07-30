@@ -1,0 +1,26 @@
+{% extends 'upload/base_template.html' %}
+{% load crispy_forms_tags %}
+
+{% block nav %}
+<a href="{% url 'expected_students' %}">
+ <button class='btn btn-warning pull-right' style="margin-right:30px">
+     Expected Students
+  </button>
+</a>
+{% endblock nav %}
+
+
+{% block content %}
+
+<h3> Upload Lecture Attendance </h3>
+         <div class="jumbotron">
+<form method="POST" enctype="multipart/form-data">
+
+          {% csrf_token %}
+          <table>
+              {{ form|crispy }}
+          </table>
+          <input type="submit" class="btn btn-primary btn-lg" name="Upload">
+          </form>
+</div>
+{% endblock content %}

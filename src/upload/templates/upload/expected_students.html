@@ -1,0 +1,59 @@
+{% extends 'upload/base_template.html' %}
+{% load crispy_forms_tags %}
+{% block css %}
+ <style media="screen">
+     .mystyle {
+         font-size: 11pt;
+         font-family: Arial;
+         border-collapse: collapse;
+         border: 1px solid silver;
+         margin-top: 6px;
+     }
+
+     .mystyle td, th {
+         padding: 5px;
+         text-align: center;
+     }
+
+     .mystyle tr:nth-child(even) {
+         background: #f5f2f2;
+     }
+
+     .mystyle tr:hover {
+         background: silver;
+         cursor: pointer;
+     }
+
+     </style>
+{% endblock css %}
+
+{% block nav %}
+<a href="{% url 'UploadAttendanceRecord' %}">
+ <button class='btn btn-info pull-right' style="margin-right:30px">
+     Home
+  </button>
+</a>
+{% endblock nav %}
+
+
+{% block content %}
+
+<h2> Manage Expected Students </h2>
+  <div class="jumbotron">
+<form method="POST" enctype="multipart/form-data">
+
+          {% csrf_token %}
+          <table>
+              {{ form|crispy }}
+          </table>
+          <input type="submit" class="btn btn-primary btn-lg" name="Upload">
+          </form>
+
+</div>
+<h2> Expected Students Data </h2>
+<div class="jumbotron">
+    {% autoescape off %}
+        {{ data }}
+    {% endautoescape %}
+</div>
+{% endblock content %}
