@@ -145,6 +145,8 @@ def insert_expected_students(data):
 def get_expected_students():
    a = json.loads(ExpectedStudents.objects.to_json())
    df = pd.DataFrame(a)
+   if len(df) == 0:
+       return pd.DataFrame()
    df.drop("_id",axis=1,inplace=True)
 
    subjects = {i:j for i,j in Global.subject_choices}
