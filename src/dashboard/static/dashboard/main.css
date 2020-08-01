@@ -1,0 +1,64 @@
+.mystyle {
+    font-size: 11pt;
+    font-family: Arial;
+    border-collapse: collapse;
+    border: 1px solid silver;
+    margin-top: 6px;
+}
+
+.mystyle td, th {
+    padding: 5px;
+    text-align: center;
+}
+
+.mystyle tr:nth-child(even) {
+    background: #f5f2f2;
+}
+
+.mystyle tr:hover {
+    background: silver;
+    cursor: pointer;
+}
+
+body {
+         margin-top: 5rem;
+}
+
+
+
+.block {
+padding: 50px 50px;
+border: 1px solid;
+text-align:center;
+border-radius:10px;
+font-size:24px;
+align-items: center;
+align-content: center;
+
+}
+
+a {
+color: #000000;
+
+}
+
+.section {
+font-size:30px;
+text-align: center;
+align-self: center;
+color: #333333
+}
+
+.title {
+padding: 36px 36px;
+border: 1px solid;
+text-align:center;
+border-radius:100px;
+font-size:43px;
+align-items: center;
+align-content: center;
+border-bottom-left-radius:200px;
+border-bottom-right-radius:200px;
+border-top-right-radius:200px;
+border-top-left-radius:200px;
+}

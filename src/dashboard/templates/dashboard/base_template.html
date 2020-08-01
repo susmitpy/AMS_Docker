@@ -6,26 +6,18 @@
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css" crossorigin="anonymous">
 
-    {% block css %}{% endblock css %}
+    {% block css %}{% endblock css %}a
 
 </head>
 <body id="page-top">
 
      <main role="main" class="container">
-         <a href="{% url 'home' %}">
-          <button class='btn btn-info pull-right' style="margin-right:30px">
-              Dashboard
-           </button>
-         </a>
-         {% block nav %}{% endblock %}
-
-
 
              {% block content %}{% endblock %}
-
 
 </main>
 

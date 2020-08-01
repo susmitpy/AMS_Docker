@@ -1,6 +1,15 @@
 {% extends 'upload/base_template.html' %}
 {% load crispy_forms_tags %}
 
+{% block css %}
+<style media="screen">
+    body {
+        margin-top: 5rem;
+    }
+
+</style>
+{% endblock css %}
+
 {% block nav %}
 <a href="{% url 'expected_students' %}">
  <button class='btn btn-warning pull-right' style="margin-right:30px">

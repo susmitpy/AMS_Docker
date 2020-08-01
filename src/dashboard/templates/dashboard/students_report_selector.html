@@ -1,0 +1,25 @@
+{% extends 'dashboard/home.html' %}
+{% load crispy_forms_tags %}
+
+{% block replace %}
+    <br><br><br>
+    <div class="jumbotron">
+        <h3> Consolidated Report </h3>
+        <br>
+        <form method="POST" enctype="multipart/form-data">
+
+                  {% csrf_token %}
+
+                      {{ form|crispy }}
+
+                  <input type="submit" class="btn btn-primary btn-lg" value="Get Data">
+                  </form>
+                  {% if fp %}
+                    <br>
+                    <button class = "btn btn-success" >
+                    <a href="{{fp}}" download> Click Here to Download </a>
+                    </button>
+                  {% endif %}
+    </div>
+
+{% endblock replace %}

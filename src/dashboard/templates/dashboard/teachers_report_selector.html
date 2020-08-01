@@ -1,0 +1,52 @@
+{% extends 'dashboard/home.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block css %}
+<link rel="stylesheet" type="text/css" href="{% static 'dashboard/df.css' %}">
+       <link rel="stylesheet" type="text/css" href="{% static 'dashboard/main.css' %}">
+       <link rel="stylesheet" type="text/css" href = "{% static 'dashboard/filter.css' %}">
+{% endblock css %}
+
+{% block replace %}
+    <br><br><br>
+    <div class="jumbotron">
+        <h3> Consolidated Report </h3>
+        <br>
+        <form method="POST" enctype="multipart/form-data">
+
+                  {% csrf_token %}
+
+                      {{ form|crispy }}
+
+                  <input type="submit" class="btn btn-primary btn-lg" value="Get Data">
+                  </form>
+                  {% if fp %}
+                    <br>
+                    <button class = "btn btn-success" >
+                    <a href="{{fp}}" download> Click Here to Download </a>
+                    </button>
+                  {% endif %}
+    </div>
+    <br><br><br>
+    <div class="jumbotron">
+        <h3> Explore Lectures </h3>
+        <form method="POST" enctype="multipart/form-data" action="{% url 'explore_lecturers' %}">
+
+                  {% csrf_token %}
+
+                      {{ date_selector|crispy }}
+
+                  <input type="submit" class="btn btn-primary btn-lg" value="Get Data">
+                  </form>
+                  {% block explore %}{% endblock explore %}
+
+    </div>
+
+{% endblock replace %}
+
+{% block javascript %}
+
+    <script src="{% static 'dashboard/filter.js' %}" charset="utf-8"></script>
+
+{% endblock javascript %}

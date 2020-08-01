@@ -1,0 +1,38 @@
+{% extends 'dashboard/base_template.html' %}
+{% load static %}
+
+{% block css %}
+<link rel="stylesheet" type="text/css" href="{% static 'dashboard/df.css' %}">
+       <link rel="stylesheet" type="text/css" href="{% static 'dashboard/main.css' %}">
+       <link rel="stylesheet" type="text/css" href = "{% static 'dashboard/filter.css' %}"
+{% endblock css %}
+
+{% block content %}
+
+         <div class="fluid-container">
+             <div class="row">
+
+                 <a href = "{% url 'students_report' %}">
+                     <div class="col-md-4 block" style="background-color:#dfedd5;">
+                         <div  class="section">
+                         Student's Report
+                         </div>
+                     </div>
+
+                 </a>
+                 <div class="col-md-4">
+                     <div class="section title">
+                         AMS
+                     </div>
+                 </div>
+                 <a href = "{% url 'teachers_report' %}">
+                 <div class="col-md-4 block" style="background-color:#d5e8ed">
+                 <div class="section">
+                     Teacher's Report
+                 </div>
+                 </div>
+             </a>
+             </div>
+</div>
+{% block replace %}{% endblock %}
+{% endblock content %}

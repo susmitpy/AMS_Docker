@@ -2,9 +2,29 @@ from django.core.files.storage import default_storage
 from models import *
 import pandas as pd
 import json
+import datetime
+from copy import deepcopy
 
-id_col_name = "ID"
-duration_col_name = "Duration"
+def convert24(str1):
+
+    # Checking if last two elements of time
+    # is AM and first two elements are 12
+    if str1[-2:] == "AM" and str1[:2] == "12":
+        return "00" + str1[2:-2]
+
+    # remove the AM
+    elif str1[-2:] == "AM":
+        return str1[:-2]
+
+    # Checking if last two elements of time
+    # is PM and first two elements are 12
+    elif str1[-2:] == "PM" and str1[:2] == "12":
+        return str1[:-2]
+
+    else:
+
+        # add 12 to hours and remove PM
+        return str(int(str1[:2]) + 12) + str1[2:8]
 
 def get_roll_num(x):
     try:
@@ -23,14 +43,16 @@ def get_expected_students_rolls_range(syjc,subject,division,lecturer):
         expected_doc.skip_roll_nums
     )
 
-def insertLecture(syjc,subject,division,lecturer,date,start_time,end_time,present_record):
+def insertLecture(syjc,subject,division,lecturer,date,start_time,end_time,num_students,present_record):
     lec = Lecture(
         syjc = syjc,
         subject = subject,
         lecturer = lecturer,
+        division=division,
         date = date,
-        start_time = int(start_time),
-        end_time = int(end_time),
+        start_time = start_time,
+        end_time = end_time,
+        num_students = num_students,
         present = present_record
     )
 
@@ -53,31 +75,54 @@ def log_attendance(data,file):
     subject = data["subject"]
     division = data["division"]
     lecturer = data["lecturer"]
-    date = data["date"]
-    start_time = str(data["start_time"])
-    start_time = start_time[:2] + start_time[3:5]
-    end_time = str(data["end_time"])
-    end_time = end_time[:2] + end_time[3:5]
 
-    file_name = date.strftime("%d_%m_%y") + "_" + lecturer + "_" + start_time + ".xlsx"
+    print(type(file))
+    f = deepcopy(file)
+    df = pd.read_csv(file)
+
+    attnd = pd.read_csv(f,skiprows=3)
+
+    date = df["Start Time"][0].split(" ")[0]
+    date = datetime.datetime.strptime(date,"%m/%d/%Y").date()
+
+    start_time_period = " ".join(df["Start Time"][0].split(" ")[1:])
+    if len(start_time_period)==10:
+        start_time_period = "0" + start_time_period
+    start_time = convert24(start_time_period)
+    start_time_str = start_time[:2]+start_time[3:5]
+    start_time = int(start_time_str)
+
+    end_time_period = " ".join(df["End Time"][0].split(" ")[1:])
+    if len(end_time_period)==10:
+        end_time_period = "0" + end_time_period
+    end_time = convert24(end_time_period)
+    end_time = int(end_time[:2]+end_time[3:5])
+
+    num_students = int(df["Participants"][0])
+
+    file_name = date.strftime("%d_%m_%y") + "_" + lecturer + "_" + start_time_str + ".csv"
     fp = "./attendance/{}/{}/{}/{}"  # attendance/syjc/E/M2/file_name
     fp = fp.format(std,division,subject,file_name)
     default_storage.delete(fp)
     default_storage.save(fp, file)
 
-    df = pd.read_excel(file)
-    df["Roll"] = df[id_col_name].map(get_roll_num)
-    df = df[["Duration","Roll"]]
-    df = df.groupby("Roll")["Duration"].sum()
-    df = pd.DataFrame(df)
-    df = df[df["Duration"] >= 30]
-    df.drop("Duration",axis=1,inplace=True)
 
-    present = list(df.index)
+    attnd = attnd.rename(columns={"Name (Original Name)":"Student","Duration (Minutes)":"Duration"})
+    attnd = attnd[["Student","Duration"]]
+
+    attnd["Roll"] = attnd["Student"].map(get_roll_num)
+
+    attnd = attnd[["Duration","Roll"]]
+    attnd = attnd.groupby("Roll")["Duration"].sum()
+    attnd = pd.DataFrame(attnd)
+    attnd = attnd[attnd["Duration"] >= 30]
+    attnd.drop("Duration",axis=1,inplace=True)
+
+    present = list(attnd.index)
     start,end,skip = get_expected_students_rolls_range(syjc,subject,division,lecturer)
     present_record = get_present_record(start,end,skip,present)
 
-    insertLecture(syjc,subject,division,lecturer,date,start_time,end_time,present_record)
+    insertLecture(syjc,subject,division,lecturer,date,start_time,end_time,num_students,present_record)
 
 def insert_expected_students(data):
      syjc = data["std"] == "SYJC"

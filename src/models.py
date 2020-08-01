@@ -38,6 +38,7 @@ class Lecture(mongo.Document):
     date = mongo.DateTimeField()
     start_time = mongo.IntField()
     end_time = mongo.IntField()
+    num_students = mongo.IntField()
     present = mongo.MapField(mongo.BooleanField())
 
     meta = {'collection': 'lectures'}
