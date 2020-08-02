@@ -4,6 +4,9 @@
 echo "Collect static files"
 python manage.py collectstatic --noinput
 
+# Migrations
+python manage.py makemigrations
+python manage.py migrate
 
 # AWS EC2 Port 80 to 8000
 sudo iptables -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to-ports 8000
