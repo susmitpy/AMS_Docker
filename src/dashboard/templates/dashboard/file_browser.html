@@ -1,0 +1,83 @@
+{% extends 'dashboard/base_template.html' %}
+{% load static %}
+{% block css %}
+
+       <link rel="stylesheet" type="text/css" href="{% static 'dashboard/main.css' %}">
+       <style media="screen">
+           .footer {
+               position: absolute;
+
+           width:100%;
+            bottom: 5px;
+               background-color: #1fc8db; /* For browsers that do not support gradients */
+                   background-image: linear-gradient(141deg, #9fb8ad 0%, #1fc8db 51%, #2cb5e8 75%);
+                   color:white;
+                   opacity:0.95;
+           }
+
+       </style>
+
+{% endblock css %}
+{% block nav %}
+
+
+<a href="{% url 'dashboard' %}">
+
+<button class='btn btn-info pull-right' style="margin-right:20px;font-size:18px;">
+ Dashboard
+</button>
+
+</a>
+<a href="{% url 'UploadAttendanceRecord' %}">
+<button class='btn btn-info pull-right' style="margin-right:20px;font-size:18px;">
+ Upload Lecture Attendance
+</button>
+</a>
+
+{% endblock nav %}
+
+{% block content %}
+
+    <h2> Browse </h2>
+     <div class="spacer"></div>
+<div class="jumbotron">
+    <span class="btn-group">
+
+       <form method="POST"> {% csrf_token %}
+           <input type="hidden" name="current_path" value="{{current_path}}">
+           <input type="hidden" name="type" value="back">
+           <button class = "btn btn-info" style="font-size:22px;"> Previous Folder </button>
+       </form>
+       </span>
+       <br>
+       <br>
+       {% if folders %}
+               <ul>
+                   {% for folder in folders %}
+                        <li>
+                            <form method="POST"> {% csrf_token %}
+                                <input type="hidden" name="current_path" value="{{current_path}}">
+                                <input type="hidden" name="folder" value="{{folder}}">
+                                <input type="hidden" name="type" value="browse">
+                                <button class = "btn btn-link" style="font-size:21px;" type="submit">
+                                    {{ folder }}
+                                </button>
+                            </form>
+                         </li>
+                   {% endfor %}
+               </ul>
+       {% else %}
+               <ul>
+                   {% for k,v in files.items %}
+                        <li>
+                            <a style="font-size:21px;" href="{{v}}" download>{{k}}</a>
+                        </li>
+
+                   {% endfor %}
+
+                </ul>
+       {% endif %}
+
+</div>
+
+{% endblock %}

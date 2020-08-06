@@ -4,6 +4,11 @@ import pandas as pd
 import json
 import datetime
 from copy import deepcopy
+from io import BytesIO
+
+from .models import Subject
+from django.contrib.auth.models import User
+from django.db.models import F
 
 def convert24(str1):
 
@@ -36,7 +41,7 @@ def get_roll_num(x):
         return None
 
 def get_expected_students_rolls_range(syjc,subject,division,lecturer):
-    expected_doc = ExpectedStudents.objects.get(syjc=syjc,subject=subject,division=division,lecturer=lecturer)
+    expected_doc = ExpectedStudents.objects(syjc=syjc,subject=subject,division=division,lecturer=lecturer).only("start_roll_num","end_roll_num","skip_roll_nums")[0]
     return (
         expected_doc.start_roll_num,
         expected_doc.end_roll_num,
@@ -58,6 +63,8 @@ def insertLecture(syjc,subject,division,lecturer,date,start_time,end_time,num_st
 
     lec.save()
 
+    return True
+
 def get_present_record(start,end,skip,present):
     present_record = {}
     for i in range(start,end+1):
@@ -69,14 +76,13 @@ def get_present_record(start,end,skip,present):
 
     return present_record
 
-def log_attendance(data,file):
+def log_attendance(lecturer_code,data,file):
     std = data["std"]
     syjc = std == "SYJC"
-    subject = data["subject"]
-    division = data["division"]
-    lecturer = data["lecturer"]
+    subject = data["subject"].code
+    division = data["division"].name
+    lecturer = lecturer_code
 
-    print(type(file))
     f = deepcopy(file)
     df = pd.read_csv(file)
 
@@ -98,19 +104,18 @@ def log_attendance(data,file):
     end_time = convert24(end_time_period)
     end_time = int(end_time[:2]+end_time[3:5])
 
-    num_students = int(df["Participants"][0])
-
-    file_name = date.strftime("%d_%m_%y") + "_" + lecturer + "_" + start_time_str + ".csv"
-    fp = "./attendance/{}/{}/{}/{}"  # attendance/syjc/E/M2/file_name
-    fp = fp.format(std,division,subject,file_name)
-    default_storage.delete(fp)
-    default_storage.save(fp, file)
+    # file_name = date.strftime("%d_%m_%y") + "_" + lecturer + "_" + start_time_str + ".csv"
+    # fp = "./attendance/{}/{}/{}/{}"  # attendance/syjc/E/M2/file_name
+    # fp = fp.format(std,division,subject,file_name)
+    # default_storage.delete(fp)
+    # default_storage.save(fp, file)
 
 
     attnd = attnd.rename(columns={"Name (Original Name)":"Student","Duration (Minutes)":"Duration"})
     attnd = attnd[["Student","Duration"]]
 
     attnd["Roll"] = attnd["Student"].map(get_roll_num)
+    attnd.dropna(inplace=True)
 
     attnd = attnd[["Duration","Roll"]]
     attnd = attnd.groupby("Roll")["Duration"].sum()
@@ -119,42 +124,74 @@ def log_attendance(data,file):
     attnd.drop("Duration",axis=1,inplace=True)
 
     present = list(attnd.index)
+    num_present = len(present)
+
     start,end,skip = get_expected_students_rolls_range(syjc,subject,division,lecturer)
     present_record = get_present_record(start,end,skip,present)
 
-    insertLecture(syjc,subject,division,lecturer,date,start_time,end_time,num_students,present_record)
+    sheet=pd.DataFrame.from_dict(present_record,orient="index",columns=["Status"])
+    sheet.index.name="Roll"
+    sheet.reset_index(inplace=True)
+    sheet["Status"] = sheet["Status"].map({True:"P",False:"A"})
+
+
+    in_memory_fp = BytesIO()
+    sheet.to_excel(in_memory_fp,index=False)
+    in_memory_fp.seek(0,0)
+    file = in_memory_fp
+    file_name = date.strftime("%d_%m_%y") + "_" + lecturer + "_" + start_time_str + ".csv"
+    fp = "./attendance/{}/{}/{}/{}"  # attendance/syjc/E/M2/file_name
+    fp = fp.format(std,division,subject,file_name)
+    default_storage.delete(fp)
+    file_name = default_storage.save(fp, file)
+
+
+    return insertLecture(syjc,subject,division,lecturer,date,start_time,end_time,num_present,present_record)
+
 
 def insert_expected_students(data):
      syjc = data["std"] == "SYJC"
      if data["skip_roll_nums"] == None:
-         skip_roll_nums = []
+         nums = []
      else:
-         skip_roll_nums = [int(i.strip()) for i in data["skip_roll_nums"].split(" ")]
+         skip_roll_nums = data["skip_roll_nums"].strip()
+         nums = []
+         for i in skip_roll_nums.split(" "):
+             try:
+                 r = int(i.strip())
+                 nums.append(r)
+             except Exception:
+                 continue
+
      expected_students = ExpectedStudents(
         syjc = syjc,
-        subject = data["subject"],
-        division = data["division"],
-        lecturer = data["lecturer"],
+        subject = data["subject"].code,
+        division = data["division"].name,
+        lecturer = data["lecturer"].code,
         start_roll_num = data["start_roll_num"],
         end_roll_num = data["end_roll_num"],
-        skip_roll_nums = skip_roll_nums
+        skip_roll_nums = nums
      )
 
      expected_students.save()
+     return True
 
-def get_expected_students():
-   a = json.loads(ExpectedStudents.objects.to_json())
+def get_expected_students(div):
+   a = json.loads(ExpectedStudents.objects(division=div.name).to_json())
    df = pd.DataFrame(a)
    if len(df) == 0:
        return pd.DataFrame()
    df.drop("_id",axis=1,inplace=True)
 
-   subjects = {i:j for i,j in Global.subject_choices}
-   lecturers = {i:j for i,j in Global.lecturer_choices}
+   subs = Subject.objects.values_list("code","name")
+   lects = User.objects.exclude(profile__code="ADMIN").select_related("profile").annotate(code=F("profile__code"),name=F("profile__fullname")).values_list("code","name")
+
+   subjects = {i:j for i,j in subs}
+   lecturers = {i:j for i,j in lects}
 
    df["subject"] = df["subject"].map(subjects)
    df["lecturer"] = df["lecturer"].map(lecturers)
    df["syjc"] = df["syjc"].map({True:"SYJC",False:"FYJC"})
-   df = df.rename(columns={"syjc":"Class"})
+   df = df.rename(columns={"syjc":"Class","subject":"Subject","division":"Division","lecturer":"Lecturer","start_roll_num":"From","end_roll_num":"To","skip_roll_nums":"Skip"})
 
    return df

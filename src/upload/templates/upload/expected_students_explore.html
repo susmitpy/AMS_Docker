@@ -1,0 +1,8 @@
+{% extends 'upload/expected_students.html' %}
+
+{% block explore %}
+ Division Selected : {{division}}
+{% autoescape off %}
+    {{ data }}
+{% endautoescape %}
+{% endblock explore %}

@@ -22,43 +22,67 @@
 
 body {
          margin-top: 5rem;
+         height:100%;
 }
 
 
 
 .block {
-padding: 50px 50px;
-border: 1px solid;
+
+padding: 20px 20px;
 text-align:center;
 border-radius:10px;
 font-size:24px;
 align-items: center;
 align-content: center;
+height: 10px 10px;
+width: 20px 20px;
+
+
+background-color: #085b96;
+
+color:white
+
+
 
 }
+
+.block:hover {
+    background-color: #1fc8db; /* For browsers that do not support gradients */
+     background-image: linear-gradient(141deg, #bec7bd 0%, #90968f 51%, #bec7bd 75%);
+     color:white;
+}
+
 
 a {
 color: #000000;
 
 }
 
-.section {
-font-size:30px;
-text-align: center;
-align-self: center;
-color: #333333
+.spacer {
+    padding:1px 1px;
+    background-color: #000000;
 }
 
 .title {
-padding: 36px 36px;
-border: 1px solid;
+padding: 24px 24px;
 text-align:center;
-border-radius:100px;
 font-size:43px;
-align-items: center;
-align-content: center;
-border-bottom-left-radius:200px;
-border-bottom-right-radius:200px;
-border-top-right-radius:200px;
-border-top-left-radius:200px;
+margin-top:-45px;
+background-color: #1fc8db; /* For browsers that do not support gradients */
+    background-image: linear-gradient(141deg, #9fb8ad 0%, #1fc8db 51%, #2cb5e8 75%);
+    color:white;
+    opacity:0.95;
+
+}
+
+.footer {
+    position: relative;
+
+width:100%;
+ bottom: 5px;
+    background-color: #1fc8db; /* For browsers that do not support gradients */
+        background-image: linear-gradient(141deg, #9fb8ad 0%, #1fc8db 51%, #2cb5e8 75%);
+        color:white;
+        opacity:0.95;
 }

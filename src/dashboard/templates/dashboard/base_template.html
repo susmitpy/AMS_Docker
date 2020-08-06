@@ -9,13 +9,32 @@
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css" crossorigin="anonymous">
-
+<link rel="stylesheet" type="text/css" href="{% static 'dashboard/main.css' %}">
     {% block css %}{% endblock css %}
 
 </head>
 <body id="page-top">
 
+    <div class="section title">
+
+
+      Attendance Management System
+    </div>
      <main role="main" class="container">
+         <br><br>
+         <div class="container">
+
+             <span class='pull-left' style="font-size:18px;">
+                 Welcome, {{ user.profile.fullname }}
+             </span>
+
+             <a href="{% url 'logout' %}">
+                 <button class='btn btn-warning pull-right' style="margin-right:20px;font-size:18px;">
+                     Logout
+                  </button>
+             </a>
+            {% block nav %}{% endblock %}
+        </div>
 
              {% block content %}{% endblock %}
 
@@ -37,4 +56,14 @@
     {% block javascript %}
     {% endblock javascript %}
 </body>
+<footer>
+
+    <center>
+            <br>
+    <div class="footer">
+        Copyright &copy; 2020 AMS All Rights Reserved
+     </div>
+ </center>
+
+</footer>
 </html>

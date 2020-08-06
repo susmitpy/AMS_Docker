@@ -1,0 +1,89 @@
+{% extends 'base_template.html' %}
+{% load crispy_forms_tags %}
+
+{% block css %}
+    <style media="screen">
+        html, body {
+            height: 100%;
+        }
+
+
+
+    </style>
+
+{% endblock css %}
+
+{% block content %}
+
+
+    <!-- <div class="spacer"></div> -->
+    <div class="outer">
+        <div class="middle">
+
+            <div class="jumbotron my_container">
+                <center>
+                    <h3> Welcome  </h3>
+                    <br>
+                </center>
+
+
+                <form method="post">
+                    {% csrf_token %}
+
+            <div class="form-group">
+
+                <label class="my_label" for="{{ form.username.id_for_label }}">Username:</label>
+                {{ form.username }}
+                {{ form.username.errors }}
+
+            </div>
+            <div class="form-group">
+
+                <label class="my_label" for="{{ form.password.id_for_label }}">Password:</label>
+                {{ form.password }}
+                {{ form.password.errors }}
+
+
+
+
+    <div class="checkbox">
+            <label><input type="checkbox" id="cb" value="" onclick="reveal()">
+                <span id="toggle_help">
+                    Show Password
+                </span>
+            </label>
+        </div>
+        <br>
+
+            </div>
+
+                <button type="submit" class = "btn btn-success btn-lg" id="my_btn"> Login </button>
+                <input type="hidden" name="next" value="{% url 'UploadAttendanceRecord' %}">
+
+                {% if form.errors %}
+                <br>
+                <br>
+                <p style="color:red;">
+                    Your username and password didn't match. Please try again</p>
+
+                {% endif %}
+                </form>
+         </div>
+         </div>
+
+     </div>
+
+
+{% endblock content %}
+
+{% block javascript %}
+<script type="text/javascript">
+function reveal()
+{
+if(document.getElementById('cb').checked)
+{document.getElementById("id_password").type='text';}
+else
+document.getElementById("id_password").type='password';
+}
+</script>
+{% endblock javascript %}

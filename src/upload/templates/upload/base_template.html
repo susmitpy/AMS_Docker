@@ -8,15 +8,32 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css" crossorigin="anonymous">
-
+    <link rel="stylesheet" type="text/css" href="{% static 'upload/main.css' %}">
     {% block css %}{% endblock css %}
 
 </head>
 <body id="page-top">
 
+    <div class="section title">
+      Attendance Management System
+    </div>
      <main role="main" class="container">
-         <a href="{% url 'home' %}">
-          <button class='btn btn-info pull-right' style="margin-right:30px">
+
+         <br>
+         <br>
+
+         <span class='pull-left' style="font-size:18px;">
+             Welcome, {{ user.profile.fullname }}
+         </span>
+
+         <a href="{% url 'logout' %}">
+             <button class='btn btn-warning pull-right' style="margin-right:20px;font-size:18px;">
+                 Logout
+              </button>
+         </a>
+
+         <a href="{% url 'dashboard' %}">
+          <button class='btn btn-info pull-right' style="margin-right:20px;font-size:18px;">
               Dashboard
            </button>
          </a>
@@ -45,4 +62,16 @@
     {% block javascript %}
     {% endblock javascript %}
 </body>
+<footer>
+
+    <center>
+            <br>
+    <div class="footer" style="position:absoulute;bottom:5px;">
+        Copyright &copy; 2020 AMS All Rights Reserved
+     </div>
+ </center>
+
+</footer>
+
+
 </html>

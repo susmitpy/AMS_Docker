@@ -1,27 +1,50 @@
 {% extends 'upload/base_template.html' %}
+
 {% load crispy_forms_tags %}
 
 {% block css %}
+
 <style media="screen">
     body {
         margin-top: 5rem;
     }
+    .footer {
+        position: absolute;
+
+    width:100%;
+     bottom: 5px;
+        background-color: #1fc8db; /* For browsers that do not support gradients */
+            background-image: linear-gradient(141deg, #9fb8ad 0%, #1fc8db 51%, #2cb5e8 75%);
+            color:white;
+            opacity:0.95;
+    }
+
+   
 
 </style>
 {% endblock css %}
 
 {% block nav %}
 <a href="{% url 'expected_students' %}">
- <button class='btn btn-warning pull-right' style="margin-right:30px">
+ <button class='btn btn-info pull-right' style="margin-right:30px;font-size:18px;">
      Expected Students
   </button>
 </a>
+
 {% endblock nav %}
 
 
 {% block content %}
+<br>
+<h2> Upload Lecture Attendance </h2>
+{% if messages %}
 
-<h3> Upload Lecture Attendance </h3>
+    {% for message in messages %}
+        <script> alert("{{ message }}") </script>
+    {% endfor %}
+
+{% endif %}
+ <div class="spacer"></div>
          <div class="jumbotron">
 <form method="POST" enctype="multipart/form-data">
 
@@ -29,7 +52,8 @@
           <table>
               {{ form|crispy }}
           </table>
-          <input type="submit" class="btn btn-primary btn-lg" name="Upload">
+          <input type="submit" class="btn btn-info btn-lg" name="Upload">
           </form>
 </div>
+
 {% endblock content %}

@@ -29,36 +29,57 @@
      }
 
 
+
+
+
+
      </style>
 {% endblock css %}
 
 {% block nav %}
 <a href="{% url 'UploadAttendanceRecord' %}">
- <button class='btn btn-info pull-right' style="margin-right:30px">
-     Home
+ <button class='btn btn-info pull-right' style="margin-right:30px;font-size:18px;">
+     Upload Lecture Attendance
   </button>
 </a>
 {% endblock nav %}
 
 
 {% block content %}
-
+<br>
 <h2> Manage Expected Students </h2>
+{% if messages %}
+
+    {% for message in messages %}
+        <script> alert("{{ message }}") </script>
+    {% endfor %}
+
+{% endif %}
+ <div class="spacer"></div>
   <div class="jumbotron">
-<form method="POST" enctype="multipart/form-data">
+<form method="POST">
 
           {% csrf_token %}
           <table>
               {{ form|crispy }}
           </table>
-          <input type="submit" class="btn btn-primary btn-lg" name="Upload">
+          <input type="submit" class="btn btn-info btn-lg" name="Upload">
           </form>
 
 </div>
 <h2> Expected Students Data </h2>
+ <div class="spacer"></div>
 <div class="jumbotron">
-    {% autoescape off %}
-        {{ data }}
-    {% endautoescape %}
+    <form method="POST" action="{% url 'explore_expected_students' %}">
+
+              {% csrf_token %}
+
+                  {{ div|crispy }}
+
+              <input type="submit" class="btn btn-info btn-lg" value="Get Data">
+              </form>
+              {% block explore %}{% endblock explore %}
+
 </div>
+
 {% endblock content %}

@@ -1,0 +1,125 @@
+body {
+         margin-top: 5rem;
+         height:100%;
+
+}
+
+
+
+.block {
+
+padding: 20px 20px;
+text-align:center;
+border-radius:10px;
+font-size:24px;
+align-items: center;
+align-content: center;
+height: 10px 10px;
+width: 20px 20px;
+
+
+background-color: #1fc8db; /* For browsers that do not support gradients */
+    background-image: linear-gradient(141deg, #bec7bd 0%, #90968f 51%, #bec7bd 75%);
+    color:white;
+
+
+
+}
+
+
+a {
+color: #000000;
+
+}
+
+.spacer {
+    padding:1px 1px;
+    background-color: #000000;
+    width:50%;
+}
+
+.title {
+padding: 24px 24px;
+text-align:center;
+font-size:43px;
+margin-top:-45px;
+background-color: #1fc8db; /* For browsers that do not support gradients */
+    background-image: linear-gradient(141deg, #9fb8ad 0%, #1fc8db 51%, #2cb5e8 75%);
+    color:white;
+    opacity:0.95;
+height:18%;
+vertical-align: middle;
+
+}
+
+.footer {
+    position: relative;
+
+width:100%;
+ bottom: 5px;
+    background-color: #1fc8db; /* For browsers that do not support gradients */
+        background-image: linear-gradient(141deg, #9fb8ad 0%, #1fc8db 51%, #2cb5e8 75%);
+        color:white;
+        opacity:0.95;
+}
+
+.outer {
+  display: table;
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+
+}
+.middle {
+  display: table-cell;
+  vertical-align: middle;
+}
+
+.my_container {
+    margin-left: auto;
+ margin-right: auto;
+ width: 360px;
+ height:60%;
+ position:relative;
+ top:50px;
+ padding-top:10px;
+padding-bottom:5px;
+}
+
+#cb {
+    height:18px;
+    width:18px;
+}
+
+#toggle_help {
+    font-size:16px;
+    padding-left:5px;
+}
+
+[type="checkbox"]
+{
+    vertical-align:middle;
+}
+
+#my_btn {
+    width:100%;
+}
+
+#id_username {
+    margin-left: 0px;
+}
+
+
+
+.my_body  {
+    background-image:url('auth_bg.png');
+  background-repeat:no-repeat;
+  height: 77%;
+  width:100%;
+}
+
+.my_label {
+    font-size:16px;
+}
