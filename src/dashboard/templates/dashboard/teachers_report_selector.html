@@ -14,7 +14,7 @@
     <div class="spacer"></div>
     <div class="jumbotron">
 
-        <form method="POST" enctype="multipart/form-data">
+        <form method="POST" action="{% url 'teachers_report' %}">
 
                   {% csrf_token %}
 
@@ -44,7 +44,7 @@
      <div class="spacer"></div>
     <div class="jumbotron">
 
-        <form method="POST" enctype="multipart/form-data" action="{% url 'explore_lecturers' %}">
+        <form method="POST" action="{% url 'explore_lecturers' %}">
 
                   {% csrf_token %}
 

@@ -25,7 +25,6 @@ class ExploreExpectedStudents(View):
     def get_post_context(self,div):
         df = get_expected_students(div)
         df = df.to_html(classes=["mystyle table table-bordered table-striped"],index=False)
-        # TODO: Filterable Table
         divi = DivisionSelectorForm()
         form = ExpectedStudentsInsertForm()
         return {"data":df,"form":form,"div":divi,"division":div}

@@ -57,7 +57,7 @@
 {% endif %}
  <div class="spacer"></div>
   <div class="jumbotron">
-<form method="POST">
+<form method="POST" action="{% url 'expected_students' %}">
 
           {% csrf_token %}
           <table>
