@@ -18,9 +18,18 @@
                   </form>
                   {% if fp %}
                     <br>
-                    <button class = "btn btn-success" >
-                     <a href="{{fp}}" style="color:white;font-size:18px;" download> Click Here to Download </a>
-                    </button>
+                    {% if fp != "NA" %}
+
+                        <button class = "btn btn-success">
+                        <a href="{{fp}}" style="color:white;font-size:18px;" download> Click Here to Download </a>
+                        </button>
+
+                    {% else %}
+
+                        <p> No Data Available </p>
+
+                     {% endif %}
+
                   {% endif %}
     </div>
 

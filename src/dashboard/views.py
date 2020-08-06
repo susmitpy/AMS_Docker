@@ -115,7 +115,6 @@ class TeachersReport(View):
         return {"form":form,"explore_form":explore_form}
 
     def get_post_context(self,fd,td,std):
-        # use mongoDB aggregation
         fp = get_teachers_report_file_path(fd,td,std)
         form = TeachersReportSelector()
         explore_form = ExploreLecturesForm()

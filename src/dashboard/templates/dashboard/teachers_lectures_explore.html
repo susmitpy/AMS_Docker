@@ -1,6 +1,7 @@
 {% extends 'dashboard/teachers_report_selector.html' %}
 
 {% block explore %}
+{% if data %}
 <div class="row" style="padding:6px;">
      <div class="panel panel-primary filterable">
          <div class="panel-heading" style="background-color: #adf8ff;">
@@ -19,4 +20,10 @@
               {% endautoescape %}
      </div>
  </div>
+  {% else %}
+      <br>
+      <p> No Data Available </p>
+
+{% endif %}
+
 {% endblock explore %}

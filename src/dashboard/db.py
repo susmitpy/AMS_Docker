@@ -38,6 +38,10 @@ def get_lectures_data(date,std):
         data.append(obj)
 
     df = pd.DataFrame(data)
+
+    if len(df) == 0:
+        return None
+
     df["date"] = df["date"].map(lambda x: x.strftime("%d/%m/%y"))
     df["start_time"] = df["start_time"].map(lambda x: str(x)[:2] + ":" + str(x)[2:])
     df["end_time"] = df["end_time"].map(lambda x: str(x)[:2] + ":" + str(x)[2:])
@@ -76,6 +80,10 @@ def get_teachers_report_file_path(from_date,to_date,std):
     syjc = std == "SYJC"
     query = Lecture.objects(date__gte=from_date,date__lte=to_date,syjc=syjc).only("division","lecturer","subject")
     df = pd.DataFrame(json.loads(query.to_json()))
+
+    if len(df) == 0:
+        return "NA"
+
     df.drop("_id",axis=1,inplace=True)
 
     df = df.rename({"subject":"Subject","lecturer":"Lecturer","division":"Division"},axis=1)
@@ -126,6 +134,10 @@ def get_students_report_file_path(from_date,to_date,division,std):
     ans = filtered.aggregate(pipeline)
     data = [i for i in ans]
     df = pd.DataFrame(data)
+
+    if len(df) == 0:
+        return "NA"
+
     df = df.rename(columns={"_id":"Roll","count":"Total","present":"Present"})
     df = df.sort_values("Roll")
 
