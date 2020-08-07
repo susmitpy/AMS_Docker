@@ -43,7 +43,7 @@ class FileBrowser(View):
                 files = contents[1]
                 files_data = {}
                 for file in files:
-                    files_data[file] = "media/" + cp + file
+                    files_data[file] = "http://ec2-15-207-80-251.ap-south-1.compute.amazonaws.com" + "/media/" + cp + file
                 return {"files":files_data,"current_path":cp}
             else:
                 folders = contents[0]
