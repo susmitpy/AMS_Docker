@@ -4,7 +4,7 @@ services:
     image: nginx:latest
     container_name: ng01
     ports:
-      - "80:80"
+      - "80:8000"
     volumes:
       - ./src:/src
       - ./config/nginx:/etc/nginx/conf.d
@@ -19,4 +19,4 @@ services:
       - ./src:/src
       - /static:/static
     expose:
-      - "80"
+      - "8000"

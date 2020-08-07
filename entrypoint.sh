@@ -16,4 +16,4 @@ python manage.py init_admin
 
 # Start server
 echo "Starting server"
-gunicorn AMS.wsgi -b 0.0.0.0:80
+gunicorn AMS.wsgi -b 0.0.0.0:8000
