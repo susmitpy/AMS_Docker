@@ -94,7 +94,7 @@ def get_teachers_report_file_path(from_date,to_date,std):
 
     subjects_mapper = get_subjects_mapper()
     lecturers_mapper = get_lecturers_mapper()
-    b.index = b.index.map(index_mapper,subjects_mapper,lecturers_mapper)
+    b.index = b.index.map(lambda x: index_mapper(x,subjects_mapper,lecturers_mapper))
 
     fd = from_date.strftime("%d_%m_%y")
     td = to_date.strftime("%d_%m_%y")
