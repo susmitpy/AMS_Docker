@@ -20,4 +20,3 @@ services:
       - /static:/static
     expose:
       - "8000"
-container_name: ams_container
