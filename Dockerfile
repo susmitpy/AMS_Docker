@@ -1,7 +1,6 @@
 FROM python:3.7
 ENV PYTHONUNBUFFERED 1
 COPY /config/requirements.pip /config/
-COPY /config/nginx/ams.conf /etc/nginx/conf.d/default.conf
 RUN pip install -r /config/requirements.pip
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
