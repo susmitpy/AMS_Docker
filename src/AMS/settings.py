@@ -28,9 +28,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = ')8306bn)*_o@ajz(51*-*a3(scg*nt^)tfhjzital+7!e$gm#v'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
-ALLOWED_HOSTS = ["web","localhost","13.232.183.198"]
+ALLOWED_HOSTS = ["localhost"]
 
 
 # Application definition
@@ -58,6 +58,8 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+CSRF_COOKIE_SECURE = True
 
 ROOT_URLCONF = 'AMS.urls'
 
@@ -137,7 +139,7 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
-# 
+
 #
 # STATICFILES_DIRS = (
 #     os.path.join(BASE_DIR, "static"),

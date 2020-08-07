@@ -12,9 +12,6 @@ from django.contrib.auth.forms import PasswordChangeForm
 
 from django.contrib.auth import update_session_auth_hash
 
-@login_required()
-def home(req):
-    return render(req,"dashboard/home.html")
 
 @method_decorator(login_required, name='dispatch')
 class FileBrowser(View):

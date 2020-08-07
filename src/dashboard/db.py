@@ -12,15 +12,16 @@ from upload.models import Subject
 from django.db.utils import OperationalError
 from django.contrib.auth.models import User
 from django.db.models import F
-try:
-    subs = Subject.objects.values_list("code","name")
-    lects = User.objects.exclude(profile__code="ADMIN").select_related("profile").annotate(code=F("profile__code"),name=F("profile__fullname")).values_list("code","name")
 
+def get_subjects_mapper():
+    subs = Subject.objects.values_list("code","name")
     subjects = {i:j for i,j in subs}
+    return subjects
+
+def get_lecturers_mapper():
+    lects = User.objects.exclude(profile__code="ADMIN").select_related("profile").annotate(code=F("profile__code"),name=F("profile__fullname")).values_list("code","name")
     lecturers = {i:j for i,j in lects}
-except OperationalError:
-    subjects = {}
-    lecturers = {}
+    return lecturers
 
 def get_lectures_data(date,std):
     syjc = std == "SYJC"
@@ -48,8 +49,8 @@ def get_lectures_data(date,std):
     df = df.rename(columns={"division":"Division","subject":"Subject","lecturer":"Lecturer","date":"Date","start_time":"From","end_time":"To","num_students":"Students"})
     df = df[["Division","Subject","Lecturer","Date","From","To","Students"]]
 
-    df["Subject"] = df["Subject"].map(subjects)
-    df["Lecturer"] = df["Lecturer"].map(lecturers)
+    df["Subject"] = df["Subject"].map(get_subjects_mapper())
+    df["Lecturer"] = df["Lecturer"].map(get_lecturers_mapper())
 
     df = df.to_html(classes=["mystyle table table-bordered table-striped"],index=False,table_id="mytable")
     df = re.sub('<tbody>', '<tbody id="log">',df)
@@ -72,8 +73,8 @@ def get_lectures_data(date,std):
     df = df.replace("\\n","<br>")
     return df
 
-def index_mapper(r):
-    return (r[0],subjects.get(r[1]),lecturers.get(r[2]))
+def index_mapper(r,subjects_mapper,lecturers_mapper):
+    return (r[0],subjects_mapper.get(r[1]),lecturers_mapper.get(r[2]))
 
 def get_teachers_report_file_path(from_date,to_date,std):
 
@@ -91,7 +92,9 @@ def get_teachers_report_file_path(from_date,to_date,std):
     a = df.groupby(["Division","Subject","Lecturer"]).size()
     b = pd.DataFrame(a,columns=["Count"])
 
-    b.index = b.index.map(index_mapper)
+    subjects_mapper = get_subjects_mapper()
+    lecturers_mapper = get_lecturers_mapper()
+    b.index = b.index.map(index_mapper,subjects_mapper,lecturers_mapper)
 
     fd = from_date.strftime("%d_%m_%y")
     td = to_date.strftime("%d_%m_%y")

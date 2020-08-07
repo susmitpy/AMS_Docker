@@ -1,0 +1,88 @@
+.mystyle {
+    font-size: 11pt;
+    font-family: Arial;
+    border-collapse: collapse;
+    border: 1px solid silver;
+    margin-top: 6px;
+}
+
+.mystyle td, th {
+    padding: 5px;
+    text-align: center;
+}
+
+.mystyle tr:nth-child(even) {
+    background: #f5f2f2;
+}
+
+.mystyle tr:hover {
+    background: silver;
+    cursor: pointer;
+}
+
+body {
+         margin-top: 5rem;
+         height:100%;
+}
+
+
+
+.block {
+
+padding: 20px 20px;
+text-align:center;
+border-radius:10px;
+font-size:24px;
+align-items: center;
+align-content: center;
+height: 10px 10px;
+width: 20px 20px;
+
+
+background-color: #085b96;
+
+color:white
+
+
+
+}
+
+.block:hover {
+    background-color: #1fc8db; /* For browsers that do not support gradients */
+     background-image: linear-gradient(141deg, #bec7bd 0%, #90968f 51%, #bec7bd 75%);
+     color:white;
+}
+
+
+a {
+color: #000000;
+
+}
+
+.spacer {
+    padding:1px 1px;
+    background-color: #000000;
+}
+
+.title {
+padding: 24px 24px;
+text-align:center;
+font-size:43px;
+margin-top:-45px;
+background-color: #1fc8db; /* For browsers that do not support gradients */
+    background-image: linear-gradient(141deg, #9fb8ad 0%, #1fc8db 51%, #2cb5e8 75%);
+    color:white;
+    opacity:0.95;
+
+}
+
+.footer {
+    position: relative;
+
+width:100%;
+ bottom: 5px;
+    background-color: #1fc8db; /* For browsers that do not support gradients */
+        background-image: linear-gradient(141deg, #9fb8ad 0%, #1fc8db 51%, #2cb5e8 75%);
+        color:white;
+        opacity:0.95;
+}
