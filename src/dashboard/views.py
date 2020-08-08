@@ -11,6 +11,7 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth.forms import PasswordChangeForm
 
 from django.contrib.auth import update_session_auth_hash
+from models import Global
 
 
 @method_decorator(login_required, name='dispatch')
@@ -43,7 +44,7 @@ class FileBrowser(View):
                 files = contents[1]
                 files_data = {}
                 for file in files:
-                    files_data[file] = "http://ec2-15-207-80-251.ap-south-1.compute.amazonaws.com" + "/media/" + cp + file
+                    files_data[file] = Global.host_path + "media/" + cp + file
                 return {"files":files_data,"current_path":cp}
             else:
                 folders = contents[0]
@@ -86,6 +87,7 @@ class StudentsReport(View):
     def get_post_context(self,fd,td,d,std):
         form = StudentsReportSelector()
         fp = get_students_report_file_path(fd,td,d,std)
+        fp = Global.host_path + fp
         return {"form":form,"fp":fp}
 
 @method_decorator(login_required, name='dispatch')
@@ -113,6 +115,7 @@ class TeachersReport(View):
 
     def get_post_context(self,fd,td,std):
         fp = get_teachers_report_file_path(fd,td,std)
+        fp = Global.host_path + fp
         form = TeachersReportSelector()
         explore_form = ExploreLecturesForm()
         return {"fp":fp,"form":form,"explore_form":explore_form}

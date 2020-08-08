@@ -2,6 +2,7 @@ import mongoengine as mongo
 
 class Global:
     std_choices = [("SYJC","SYJC"),("FYJC","FYJC")]
+    host_path = "http://ec2-15-207-80-251.ap-south-1.compute.amazonaws.com/"
 
 class Lecture(mongo.Document):
     syjc = mongo.BooleanField()
