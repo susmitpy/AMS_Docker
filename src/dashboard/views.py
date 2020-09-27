@@ -73,9 +73,8 @@ class StudentsReport(View):
         if form.is_valid():
             from_date = form.cleaned_data["from_date"]
             to_date = form.cleaned_data["to_date"]
-            division = form.cleaned_data["division"]
             std = form.cleaned_data["std"]
-            context = self.get_post_context(from_date,to_date,division,std)
+            context = self.get_post_context(from_date,to_date,std)
         else:
             context = {}
         return render(req,"dashboard/students_report_selector.html",context)
@@ -84,9 +83,9 @@ class StudentsReport(View):
         form = StudentsReportSelector()
         return {"form":form}
 
-    def get_post_context(self,fd,td,d,std):
+    def get_post_context(self,fd,td,std):
         form = StudentsReportSelector()
-        fp = get_students_report_file_path(fd,td,d,std)
+        fp = get_students_report_file_path(fd,td,std)
         fp = Global.host_path + fp
         return {"form":form,"fp":fp}
 

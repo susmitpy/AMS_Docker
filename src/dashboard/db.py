@@ -109,30 +109,36 @@ def get_teachers_report_file_path(from_date,to_date,std):
 
     return "media/" + file_path
 
-def get_students_report_file_path(from_date,to_date,division,std):
+def get_students_report_file_path(from_date,to_date,std):
     syjc = std == "SYJC"
-    filtered = Lecture.objects(Q(date__lte=to_date) & Q(date__gte=from_date) & Q(division=division.name) & Q(syjc=syjc)).only("present")
+    filtered = Lecture.objects(Q(date__lte=to_date) & Q(date__gte=from_date) & Q(syjc=syjc)).only("present","division")
     pipeline = [
-        {
-                "$project":{
-                        "record": {
-                                    "$objectToArray":"$present"
-                                }
-                        }
-        },
-        {
-                "$unwind" : "$record"
-        },
-        {
-                "$group" :{
-                            "_id":"$record.k",
-                            "count":{"$sum":1},
-                            "present":{
-                                        "$sum": {"$cond" : [ "$record.v", 1, 0 ] }
-                                    }
-                        }
-        }
-        ]
+            {
+                    "$project":{
+                            "record": {
+                                        "$objectToArray":"$present",
+
+                                    },
+                                    "division":"$division"
+                            }
+            },
+            {
+                    "$unwind" : "$record",
+
+            },
+            {
+                    "$group" :{
+                                "_id": {
+                                        "roll":"$record.k",
+                                        "division":"$division"
+                                        },
+                                "count":{"$sum":1},
+                                "present":{
+                                            "$sum": {"$cond" : [ "$record.v", 1, 0 ] }
+                                        }
+                            }
+            }
+            ]
 
     ans = filtered.aggregate(pipeline)
     data = [i for i in ans]
@@ -140,10 +146,10 @@ def get_students_report_file_path(from_date,to_date,division,std):
 
     if len(df) == 0:
         return "NA"
-
-    df = df.rename(columns={"_id":"Roll","count":"Total","present":"Present"})
+    df = pd.concat([df.drop(['_id'], axis=1), df['_id'].apply(pd.Series)], axis=1)
+    df = df.rename(columns={"roll":"Roll","division":"Division","count":"Total","present":"Present"})
     df = df.sort_values("Roll")
-
+    df = df[["Division","Roll","Total","Present"]]
     fd = from_date.strftime("%d_%m_%y")
     td = to_date.strftime("%d_%m_%y")
 
@@ -151,7 +157,7 @@ def get_students_report_file_path(from_date,to_date,division,std):
     df.to_excel(in_memory_fp,index=False)
     in_memory_fp.seek(0,0)
     file = in_memory_fp
-    file_path = f"students_reports/{division}/{fd}__{td}.xlsx"
+    file_path = f"students_reports/{fd}__{td}.xlsx"
     default_storage.delete(file_path)
     file_name = default_storage.save(file_path, file)
 
